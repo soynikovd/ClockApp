@@ -1,6 +1,7 @@
 package ClockApp;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -31,13 +32,15 @@ public class ClockApp implements ActionListener {
         }
     });
     public ClockApp() {
+        frame.getContentPane().setBackground(Color.pink);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
+        frame.setLocation(450, 150);
+        frame.setSize(370, 400);
         frame.setLayout(null);
         frame.setVisible(true);
 
         timeLabel.setText(hoursString + ":" + minutesString + ":" + secondsString);
-        timeLabel.setBounds(100, 100, 200, 100);
+        timeLabel.setBounds(150, 100, 200, 100);
         start.setBounds(50, 250, 100, 50);
         reset.setBounds(200, 250, 100, 50);
 
@@ -47,9 +50,45 @@ public class ClockApp implements ActionListener {
 
         start.addActionListener(this);
         reset.addActionListener(this);
+        start.setBackground(Color.cyan);
+        reset.setBackground(Color.cyan);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == start) {
+            if (started == false) {
+                started = true;
+                start.setText("STOP");
+                start();
+            }
+            else{
+                started = false;
+                start.setText("START");
+                stop();
+            }
+        }
+        if(e.getSource() == reset) {
+            started = false;
+            start.setText("START");
+            reset();
+        }
+    }
+    void start() {
+        timer.start();
+    }
+    void stop() {
+        timer.stop();
+    }
+    void reset() {
+        timer.stop();
+        elapsedTime = 0;
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        secondsString = String.format("%02d", seconds);
+        minutesString = String.format("%02d", minutes);
+        hoursString = String.format("%02d", hours);
+        timeLabel.setText(hoursString + ":" + minutesString + ":" + secondsString);
     }
 
     public static void main(String[] args) {
